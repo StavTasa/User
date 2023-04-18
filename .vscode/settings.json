@@ -1,0 +1,6 @@
+{
+  "python.defaultInterpreterPath": "api/.venv/Scripts/python",
+  "python.linting.pycodestyleEnabled": true,
+  "python.linting.pylintEnabled": true,
+  "python.formatting.provider": "black"
+}
