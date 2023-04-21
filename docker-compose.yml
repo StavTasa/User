@@ -1,0 +1,22 @@
+version: '3.9'
+services:
+  user_api:
+    container_name: user_api
+    build: ./api
+    restart: always
+    ports:
+      - '5050:5050'
+    depends_on:
+      - flask_db
+    environment:
+      - DB_URL=postgresql://postgres:postgres@flask_db:5432/postgres
+  flask_db:
+    container_name: flask_db
+    image: postgres:12
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
