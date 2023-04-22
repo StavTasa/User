@@ -7,11 +7,11 @@ services:
     ports:
       - '5050:5050'
     depends_on:
-      - flask_db
+      - user_db
     environment:
-      - DB_URL=postgresql://postgres:postgres@flask_db:5432/postgres
-  flask_db:
-    container_name: flask_db
+      - DB_URL=postgresql://postgres:postgres@user_db:5432/postgres
+  user_db:
+    container_name: user_db
     image: postgres:12
     restart: always
     ports:
