@@ -18,7 +18,7 @@ def test_client():
                 db.session.commit()
 
 
-def test_user_db(test_client):
+def test_user_db():
     with app.app_context():
         # create a test user
         test_user = User(

@@ -1,8 +1,8 @@
 {
   "python.linting.pycodestyleEnabled": true,
   "python.linting.pylintEnabled": true,
-  "python.formatting.provider": "none",
+  "python.formatting.provider": "black",
   "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter"
+    "editor.defaultFormatter": "ms-python.python"
   }
 }
