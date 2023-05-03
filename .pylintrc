@@ -29,3 +29,7 @@ max-returns=2
 
 # Maximum number of statements in function / method body
 max-statements=30
+
+[pylint.messages control]
+disable=C0116
+disable=C0411
