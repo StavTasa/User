@@ -43,7 +43,12 @@
    docker exec -it user_api bash
    ```
 
-3. In 'user_api' shell run the following command:
+3. 1. For running all tests, in 'user_api' shell run the following command:
    ```
    python -m pytest
    ```
+   2. For running only specific test, in 'user_api' shell run the following command:
+   ```
+   python -m pytest tests/<test_name>
+
+   Note: Replace <test_name> with the name of the test you want to run (I.E. test_db.py || test_crud.py)
