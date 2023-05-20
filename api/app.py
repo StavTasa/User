@@ -1,6 +1,7 @@
 from os import environ
 from flask import Flask, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
+import copy
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = environ.get("DB_URL")
@@ -44,9 +45,11 @@ def create_user():
 def get_user(id):
     try:
         user = User.query.filter_by(id=id).first()
-        return make_response(jsonify({'user': user.json()}), 200)
-    except Exception as e:
+        if user:
+            return make_response(jsonify({'user': user.json()}), 200)
         return make_response(jsonify({'message': 'ERROR! user not found'}), 400)
+    except Exception as e:
+        return make_response(jsonify({'message': 'ERROR!'}), 500)
 
 
 # update user details
@@ -81,7 +84,7 @@ def delete_user(id):
         if user:
             db.session.delete(user)
             db.session.commit()
-            return make_response(jsonify({'message': user.json()}), 204)
+            return make_response(jsonify({'message': user.json()}), 200)
         return make_response(jsonify({'message':'ERROR! user not found'}), 400)
     except Exception as e:
-        return make_response(jsonify({'message':'ERROR!'}), 400)
+        return make_response(jsonify({'message':'ERROR!'}), 500)
