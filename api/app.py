@@ -12,10 +12,10 @@ from DB.models import User
 
 with app.app_context():
     db.create_all()
-    
+
 
 # add user to DB
-@app.route("/users", methods=['POST'])
+@app.route("/user", methods=['POST'])
 def create_user():
     try:
         data = request.get_json()
@@ -36,7 +36,7 @@ def create_user():
     
 
 # get user by id from DB
-@app.route("/users/<int:id>", methods=['GET'])
+@app.route("/user/<int:id>", methods=['GET'])
 def get_user(id):
     try:
         user = User.query.filter_by(id=id).first()
@@ -48,7 +48,7 @@ def get_user(id):
 
 
 # update user details
-@app.route("/users/<int:id>", methods=['PUT'])
+@app.route("/user/<int:id>", methods=['PUT'])
 def update_user(id):
     try:
         user = User.query.filter_by(id=id).first()
@@ -72,7 +72,7 @@ def update_user(id):
         return make_response(jsonify({'message': 'ERROR!'}), 500)
     
 #delete user
-@app.route("/users/<int:id>", methods=['DELETE'])
+@app.route("/user/<int:id>", methods=['DELETE'])
 def delete_user(id):
     try:
         user = User.query.filter_by(id=id).first()
