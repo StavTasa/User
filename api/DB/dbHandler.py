@@ -63,7 +63,7 @@ def delete_user(id):
         if user:
             db.session.delete(user)
             db.session.commit()
-            return make_response(jsonify({'message': user.json()}), 200)
+            return make_response(jsonify({'message': user.json()['id']}), 200)
         return make_response(jsonify({'message':'ERROR! user not found'}), 400)
     except Exception as e:
         return make_response(jsonify({'message':'ERROR!'}), 500)
