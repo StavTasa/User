@@ -10,6 +10,7 @@ def create_user_route():
     result = create_user(data)
     return result
 
+
 @app.route("/user/<int:id>", methods=['GET', 'PUT', 'DELETE'])
 def handle_user_route(id):
     if request.method == 'GET':

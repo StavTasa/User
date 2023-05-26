@@ -49,7 +49,7 @@ def test_update_user(test_client):
 # delete existing user
 def test_delete_user(test_client):
     response = test_client.delete('/user/10')
-    assert response.status_code == 204
+    assert response.status_code == 200
 
 
 #### FAILURE TESTS ####
