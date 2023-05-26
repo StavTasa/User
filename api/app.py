@@ -12,12 +12,7 @@ from DB.models import User
 
 with app.app_context():
     db.create_all()
-
-
-@app.route("/")
-def hello():
-    return "Hello World!?!?!?!?"
-
+    
 
 # add user to DB
 @app.route("/users", methods=['POST'])
@@ -74,7 +69,7 @@ def update_user(id):
             return make_response(jsonify({'message': 'Error! ID already exists'}), 400)
         elif 'duplicate key value violates unique constraint "users_email_key"' in error_message:
             return make_response(jsonify({'message': 'Error! Email already exists'}), 400)
-        return make_response(jsonify({'message': 'ERROR!'}), 400)
+        return make_response(jsonify({'message': 'ERROR!'}), 500)
     
 #delete user
 @app.route("/users/<int:id>", methods=['DELETE'])
