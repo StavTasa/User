@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, make_response
 from DB.models import User
 from app import db
+from errors import UserNotFoundError, DuplicateEmailError, DuplicateIDError, DatabaseError
 
 
 # create new user in db
@@ -16,10 +17,10 @@ def create_user(data):
         db.session.rollback()
         error_message = str(e.orig)
         if 'duplicate key value violates unique constraint "users_pkey"' in error_message:
-            return make_response(jsonify({'message': 'Error! ID already exists'}), 400)
+            raise DuplicateIDError()
         elif 'duplicate key value violates unique constraint "users_email_key"' in error_message:
-            return make_response(jsonify({'message': 'Error! Email already exists'}), 400)
-        return make_response(jsonify({'message': 'ERROR!'}), 500)
+            raise DuplicateEmailError()
+        raise DatabaseError()
 
 
 # get user by id from DB
@@ -28,10 +29,12 @@ def get_user(id):
         user = User.query.filter_by(id=id).first()
         if user:
             return make_response(jsonify({'user': user.json()}), 200)
-        return make_response(jsonify({'message': 'ERROR! user not found'}), 400)
+        raise UserNotFoundError()
+    except UserNotFoundError:
+        raise
     except Exception as e:
-        return make_response(jsonify({'message': 'ERROR!'}), 500)
-
+        raise DatabaseError()
+    
 
 # update user details
 def update_user(id, data):
@@ -45,15 +48,17 @@ def update_user(id, data):
             user.email = data['email'].lower()
             db.session.commit()
             return make_response(jsonify({'message': user.json()}), 200)
-        return make_response(jsonify({'message': 'ERROR! user id not found'}), 400)
+        raise UserNotFoundError()
+    except UserNotFoundError:
+        raise
     except Exception as e:
         db.session.rollback()
         error_message = str(e.orig)
         if 'duplicate key value violates unique constraint "users_pkey"' in error_message:
-            return make_response(jsonify({'message': 'Error! ID already exists'}), 400)
+            raise DuplicateIDError()
         elif 'duplicate key value violates unique constraint "users_email_key"' in error_message:
-            return make_response(jsonify({'message': 'Error! Email already exists'}), 400)
-        return make_response(jsonify({'message': 'ERROR!'}), 500)
+            raise DuplicateEmailError()
+        raise DatabaseError()
 
 
 # delete user
@@ -64,6 +69,9 @@ def delete_user(id):
             db.session.delete(user)
             db.session.commit()
             return make_response(jsonify({'message': user.json()['id']}), 200)
-        return make_response(jsonify({'message':'ERROR! user not found'}), 400)
+        raise UserNotFoundError()
+    except UserNotFoundError:
+        raise
     except Exception as e:
-        return make_response(jsonify({'message':'ERROR!'}), 500)
+        db.session.rollback()
+        raise DatabaseError()
