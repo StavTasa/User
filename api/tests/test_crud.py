@@ -22,11 +22,11 @@ def test_client():
             db.session.commit()
             yield testing_client
             # after test finished delete remaining user
-            # for i in range(10, 14):
-            #     user = User.query.filter_by(id=i).first()
-            #     if user:
-            #         db.session.delete(user)
-            #         db.session.commit()
+            for i in range(10, 14):
+                user = User.query.filter_by(id=i).first()
+                if user:
+                    db.session.delete(user)
+                    db.session.commit()
 
 
 #### SUCCESS TESTS ####
@@ -70,7 +70,7 @@ def test_delete_user(test_client):
 # create user that already exists in DB
 def test_create_existing_user(test_client):
     data = {"id": "13", "first_name": "Charles", "last_name": "Boyle", "password": "11", "email": "Charles@gmail.com"}
-    response = test_client.put('/user/13', json=data)
+    response = test_client.post('/user', json=data)
     assert response.status_code == 400
 
 
