@@ -37,3 +37,12 @@ def handle_duplicate_email_error(error):
 @app.errorhandler(DatabaseError)
 def handle_database_error(error):
     return make_response(jsonify({'message': 'ERROR!'}), 500)
+
+
+def handle_errors(error_message):
+    if 'duplicate key value violates unique constraint "users_pkey"' in error_message:
+        raise DuplicateIDError()
+    elif 'duplicate key value violates unique constraint "users_email_key"' in error_message:
+        raise DuplicateEmailError()
+    else:
+        raise DatabaseError()
