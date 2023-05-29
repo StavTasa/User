@@ -95,8 +95,6 @@ def delete_remaining_users():
         if user:
             db.session.delete(user)
             db.session.commit()
-            with open('logs/output.log', 'a') as f:
-                f.write("deleted all users\n")
 
 
 # print created users to output.txt

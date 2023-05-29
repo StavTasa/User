@@ -1,7 +1,7 @@
-from flask import Flask, request, jsonify, make_response
+from flask import request, jsonify, make_response
 from DB.dbHandler import create_user, get_user, update_user, delete_user
 from app import app, db
-from errors import handle_errors, UserNotFoundError
+from DB.dbErrors import handle_errors, UserNotFoundError
 
 
 # Create a user
