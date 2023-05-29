@@ -1,5 +1,5 @@
 from flask import request, jsonify, make_response
-from DB.dbHandler import create_user, get_user, update_user, delete_user
+from DB.dbHandler import Crud
 from app import app, db
 from DB.dbErrors import handle_errors, UserNotFoundError
 
@@ -9,7 +9,7 @@ from DB.dbErrors import handle_errors, UserNotFoundError
 def create_user_route():
     try:
         data = request.get_json()
-        result = create_user(data)
+        result = Crud.create_user(data)
         return make_response(jsonify({'message': result.json()}), 201)
     except Exception as e:
         db.session.rollback()
@@ -22,7 +22,7 @@ def handle_user_route(id):
     if request.method == 'GET':
         # Get a user by ID
         try:
-            result = get_user(id)
+            result = Crud.get_user(id)
             if result != 'user not found':
                 return make_response(jsonify({'user': result.json()}), 200)
             raise UserNotFoundError()
@@ -37,7 +37,7 @@ def handle_user_route(id):
         # Update a user
         try:
             data = request.get_json()
-            result = update_user(id, data)
+            result = Crud.update_user(id, data)
             if result != 'user not found':
                 return make_response(jsonify({'message': result.json()}), 200)
             raise UserNotFoundError()
@@ -51,7 +51,7 @@ def handle_user_route(id):
     elif request.method == 'DELETE':
         # Delete a user
         try:
-            result = delete_user(id)
+            result = Crud.delete_user(id)
             if result != 'user not found':
                 return make_response(jsonify({'message': result.json()['id']}), 200)
             raise UserNotFoundError()
