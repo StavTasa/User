@@ -47,8 +47,15 @@
    ```
    python -m pytest
    ```
-   2. For running only specific test, in 'user_api' shell run the following command:
+   2. For running only specific tests file, in 'user_api' shell run the following command:
    ```
-   python -m pytest tests/<test_name>
-
-   Note: Replace <test_name> with the name of the test you want to run (I.E. test_db.py || test_crud.py)
+   python -m pytest tests/<test_file_name>
+   ```
+   Note: Replace <test_file_name> with the name of the test you want to run (I.E. test_db.py || test_crud.py)
+   ```
+   3. For running only specific test from tests file, in 'user_api' shell run the following command:
+   ```
+   python -m pytest tests/<test_file_name> -k <test_function_name>
+   ```
+   Note: Replace <test_file_name> with the name of the test you want to run (I.E. test_db.py || test_crud.py)
+         and replace <test_function_name> with the name of the test function you want to run (I.E. test_get_user || test_create_user etc.)
