@@ -8,6 +8,8 @@ flask = "*"
 psycopg2-binary = "*"
 Flask-SQLAlchemy = "*"
 pytest = "*"
+pytest-flask = "*"
+requests = "*"
 
 [dev-packages]
 black = "*"
