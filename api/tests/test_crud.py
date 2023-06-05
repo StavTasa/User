@@ -17,9 +17,6 @@ def delete_remaining_users():
                 db.session.delete(user)
                 db.session.commit()
 
-    with open('logs/output.log', 'a') as f:
-        f.write("users deleted\n")
-
 
 @pytest.fixture(scope="session")
 def test_client():
@@ -136,5 +133,3 @@ def create_test_user(firstName="first", lastName="last", email_addr="test@gmail.
         new_user = User(id=next_id, first_name=firstName, last_name=lastName, email=email_addr, password=password_key)
         db.session.add(new_user)
         db.session.commit()
-        with open('logs/output.log', 'a') as f:
-            f.write("TEST user created: " + str(new_user) + "\n")
