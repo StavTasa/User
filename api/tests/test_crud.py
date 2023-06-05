@@ -4,24 +4,30 @@ from DB.models import User
 from DB.dbHandler import generate_id
 
 
-@pytest.fixture
+# delete all remaining users in db
+@pytest.fixture(scope="session", autouse=True)
+def delete_remaining_users():
+    yield
+
+    users_emails = ["test_user_1@gmail.com", "test_user_2@gmail.com", "test_user_3@gmail.com", "Terry@gmail.com", "Charles@gmail.com", "Jake@gmail.com"]
+    with app.app_context():
+        for user_email in users_emails:
+            user = User.query.filter_by(email=user_email.lower()).first()
+            if user:
+                db.session.delete(user)
+                db.session.commit()
+
+
+@pytest.fixture(scope="session")
 def test_client():
     flask_app = app
     flask_app.config["TESTING"] = True
 
     with flask_app.test_client() as testing_client:
         with flask_app.app_context():
-            next_id = generate_id()
-            user_1 = get_user_by_email("test_user_1@gmail.com")
-            if user_1 is None:
-                test_user_1 = User(id=next_id, first_name="test", last_name="user_1", password="10", email="test_user_1@gmail.com")
-                db.session.add(test_user_1)
-            next_id = generate_id()
-            user_2 = get_user_by_email("test_user_2@gmail.com")
-            if user_2 is None:
-                test_user_2 = User(id=next_id, first_name="test", last_name="user_2", password="10", email="test_user_2@gmail.com")
-                db.session.add(test_user_2)
-            db.session.commit()
+            create_test_user(email_addr="test_user_1@gmail.com")
+            create_test_user(email_addr="test_user_2@gmail.com")
+            create_test_user(email_addr="test_user_3@gmail.com")
             yield testing_client
 
 
@@ -70,7 +76,7 @@ def test_delete_user(test_client):
 
 # create user that already exists in DB
 def test_create_existing_user(test_client):
-    data = {"first_name": "test", "last_name": "user_2", "password": "11", "email": "test_user_2@gmail.com"}
+    data = {"first_name": "test", "last_name": "user_2", "password": "11", "email": "test_user_3@gmail.com"}
     response = test_client.post('/user', json=data)
     assert response.status_code == 400
 
@@ -95,17 +101,6 @@ def test_get_non_existing_user(test_client):
     next_id = generate_id()
     response = test_client.get(f'/user/{next_id}')
     assert response.status_code == 400
-    delete_remaining_users()
-
-
-# delete all remaining users in db
-def delete_remaining_users():
-    users_emails = ["test_user_1@gmail.com", "test_user_2@gmail.com", "Terry@gmail.com", "Charles@gmail.com", "Jake@gmail.com"]
-    for user_email in users_emails:
-        user = User.query.filter_by(email=user_email.lower()).first()
-        if user:
-            db.session.delete(user)
-            db.session.commit()
 
 
 # get user id from response message
@@ -130,3 +125,11 @@ def print_user_to_file(test_client, id):
         else:
             f.write("users updated:\n" + f'id={id}' + str(data) + '\n')
 
+
+def create_test_user(firstName="first", lastName="last", email_addr="test@gmail.com", password_key="1234"):
+    new_user = get_user_by_email(email_addr)
+    if new_user is None:
+        next_id = generate_id()
+        new_user = User(id=next_id, first_name=firstName, last_name=lastName, email=email_addr, password=password_key)
+        db.session.add(new_user)
+        db.session.commit()
