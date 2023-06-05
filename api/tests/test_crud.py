@@ -2,7 +2,6 @@ import pytest
 from app import app, db
 from DB.models import User
 from DB.dbHandler import generate_id
-from flask import request
 
 
 # delete all remaining users in db
