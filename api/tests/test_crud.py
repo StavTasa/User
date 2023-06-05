@@ -23,6 +23,9 @@ def test_client():
                 db.session.add(test_user_2)
             db.session.commit()
             yield testing_client
+            delete_remaining_users()
+            with open('logs/output.log', 'a') as f:
+                f.write("users deleted\n")
 
 
 #### SUCCESS TESTS ####
@@ -95,7 +98,7 @@ def test_get_non_existing_user(test_client):
     next_id = generate_id()
     response = test_client.get(f'/user/{next_id}')
     assert response.status_code == 400
-    delete_remaining_users()
+    # delete_remaining_users()
 
 
 # delete all remaining users in db
